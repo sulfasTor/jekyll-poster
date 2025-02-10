@@ -31,3 +31,5 @@ jobs:
         env:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FIX_RUST_2021: true
+          FIX_YAML_PRETTIER: true
