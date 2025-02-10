@@ -7,9 +7,8 @@ use std::path::PathBuf;
 use std::process::Command;
 
 const DEFAULT_EDITOR: &str = "vi";
-const TEMP_FILE_POST: &str = ".JEKYLL_EDITPOST";
 
-fn write_temp_file(layout: &str, date: &str) -> io::Result<()> {
+fn write_temp_file(filename: &str, layout: &str, date: &str) -> io::Result<()> {
     let fm = format!(
         "---
 layout: {}
@@ -24,13 +23,22 @@ tag:
 ",
         layout, date,
     );
-    fs::write(TEMP_FILE_POST, fm.as_bytes())
+    fs::write(filename, fm.as_bytes())
 }
 
 pub fn launch_editor(filename: Option<PathBuf>, layout: &str) -> Result<String, PostError> {
     let date_now = Local::now();
-    write_temp_file(layout, &date_now.format("%Y-%m-%d %H:%M:%S").to_string())
-        .map_err(|_| PostError)?;
+    let filename = format!(
+        "{}-{}.md",
+        date_now.format("%Y-%m-%d"),
+        filename.unwrap().into_os_string().into_string().unwrap()
+    );
+    write_temp_file(
+        &filename,
+        &layout,
+        &date_now.format("%Y-%m-%d %H:%M:%S").to_string(),
+    )
+    .map_err(|_| PostError)?;
 
     let editor = match env::var("EDITOR") {
         Ok(editor) => editor,
@@ -38,13 +46,9 @@ pub fn launch_editor(filename: Option<PathBuf>, layout: &str) -> Result<String, 
     };
 
     Command::new(editor)
-        .arg(TEMP_FILE_POST)
+        .arg(&filename)
         .status()
         .map_err(|_| PostError)?;
 
-    Ok(format!(
-        "{}-{}.md",
-        date_now.format("%Y-%m-%d"),
-        filename.unwrap().into_os_string().into_string().unwrap()
-    ))
+    Ok(filename)
 }
