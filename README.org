@@ -1,6 +1,17 @@
 #+TITLE: jekyll-poster [WIP]
 
+* Install
+#+begin_example
+cargo build --release
+sudo mv ./target/release/jekyll-poster /usr/local/bin/
+#+end_example
+
 * Usage
+#+begin_example
+jekyll-poster FILE [--layout <LAYOUT>] [--publish]
+#+end_example
+
+* Example
 #+begin_example
 jekyll-poster FILE [--layout <LAYOUT>] [--publish]
 #+end_example
