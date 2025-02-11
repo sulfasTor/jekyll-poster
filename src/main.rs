@@ -1,7 +1,7 @@
 use std::{path::PathBuf, process};
 
 use clap::Parser;
-use post::{post::launch_editor, publish::commit_post};
+use post::{post::launch_editor, publish::add_and_commit_post};
 
 pub mod post;
 
@@ -29,8 +29,10 @@ fn main() {
         }
     };
 
-    match commit_post(&post_path, &args.project_path) {
-        Ok(_) => println!("All fine."),
-        Err(err) => println!("{err}"),
+    if args.publish {
+        match add_and_commit_post(&post_path, &args.project_path) {
+            Ok(_) => println!("Succesfully published new post."),
+            Err(err) => println!("{err}"),
+        }
     }
 }
