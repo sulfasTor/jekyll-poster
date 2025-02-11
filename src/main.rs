@@ -1,14 +1,18 @@
-use std::path::PathBuf;
+use std::{path::PathBuf, process};
 
 use clap::Parser;
-use post::post::launch_editor;
+use post::{
+    post::launch_editor,
+    publish::{self, commit_post},
+};
 
 pub mod post;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
-    file: Option<PathBuf>,
+    post_filename: String,
+    project_path: PathBuf,
 
     #[arg(short, long, default_value = "default")]
     layout: String,
@@ -19,8 +23,17 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-    match launch_editor(args.file, &args.layout) {
-        Ok(filename) => println!("All fine. Wrote {filename}"),
+
+    let post_path = match launch_editor(&args.post_filename, &args.layout) {
+        Ok(filename_path) => filename_path,
+        Err(err) => {
+            eprint!("{}", err);
+            process::exit(1);
+        }
+    };
+
+    match commit_post(&post_path, &args.project_path) {
+        Ok(_) => println!("All fine."),
         Err(err) => println!("{err}"),
     }
 }
