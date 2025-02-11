@@ -1,7 +1,7 @@
 use std::{path::PathBuf, process};
 
 use clap::Parser;
-use post::{post::launch_editor, publish::add_and_commit_post};
+use post::{edit::launch_editor, publish::add_and_commit_post};
 
 pub mod post;
 
