@@ -32,7 +32,7 @@ fn get_or_create_post_path(base_path: &Path, post_name: &str, draft: bool) -> Re
         Local::now().format("%Y-%m-%d"),
         post_name
     ));
-    let post_dir_path = base_path.join(PathBuf::from(if draft { "_posts" } else { "_drafts" }));
+    let post_dir_path = base_path.join(PathBuf::from(if !draft { "_posts" } else { "_drafts" }));
     if !post_dir_path.is_dir() {
         fs::create_dir(&post_dir_path)?
     }

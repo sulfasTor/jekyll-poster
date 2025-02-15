@@ -28,7 +28,7 @@ fn main() {
         &args.post_id_name,
         &args.project_path,
         &args.layout,
-        &args.draft,
+        args.draft,
     ) {
         Ok(filename_path) => filename_path,
         Err(err) => {
