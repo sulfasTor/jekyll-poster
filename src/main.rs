@@ -38,7 +38,7 @@ fn main() {
     };
 
     if args.publish {
-        match add_and_commit_post(&post_path, &args.project_path) {
+        match add_and_commit_post(&post_path, &args.project_path, args.draft) {
             Ok(_) => println!("Succesfully published new post."),
             Err(err) => println!("{err}"),
         }

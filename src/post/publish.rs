@@ -9,7 +9,11 @@ fn find_last_commit(repo: &Repository) -> Result<Commit, git2::Error> {
         .map_err(|_| git2::Error::from_str("Couldn't find commit"))?)
 }
 
-pub fn add_and_commit_post(post_path: &Path, repo_path: &Path) -> Result<(), git2::Error> {
+pub fn add_and_commit_post(
+    post_path: &Path,
+    repo_path: &Path,
+    draft: bool,
+) -> Result<(), git2::Error> {
     let repo = Repository::open(repo_path)?;
     let config = repo.config()?;
     let username = config
@@ -34,7 +38,8 @@ pub fn add_and_commit_post(post_path: &Path, repo_path: &Path) -> Result<(), git
     let tree = repo.find_tree(oid)?;
 
     let commit_msg = format!(
-        "Add new post entry: {}",
+        "Add new post entry{}: {}",
+        if draft { " [draft]" } else { "" },
         post_path
             .file_name()
             .expect("Got filename path")
