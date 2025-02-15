@@ -25,13 +25,14 @@ pub fn add_and_commit_post(post_path: &Path, repo_path: &Path) -> Result<(), git
 
     let mut index = repo.index()?;
     index.add_path(rel_path)?;
+    index.write()?;
     let oid = index.write_tree()?;
 
     let signature_bot = Signature::now("jekyll-poster", "jekyll-poster")?;
     let signature = Signature::now(&username, &email)?;
     let parent_commit = find_last_commit(&repo)?;
     let tree = repo.find_tree(oid)?;
-        
+
     let commit_msg = format!(
         "Add new post entry: {}",
         post_path

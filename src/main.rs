@@ -1,7 +1,7 @@
 use std::{path::PathBuf, process};
 
 use clap::Parser;
-use post::{edit::launch_editor, publish::add_and_commit_post};
+use post::{edit::edit_post, publish::add_and_commit_post};
 
 pub mod post;
 
@@ -16,12 +16,20 @@ struct Args {
 
     #[arg(short, long)]
     publish: bool,
+
+    #[arg(short, long)]
+    draft: bool,
 }
 
 fn main() {
     let args = Args::parse();
 
-    let post_path = match launch_editor(&args.post_id_name, &args.project_path, &args.layout) {
+    let post_path = match edit_post(
+        &args.post_id_name,
+        &args.project_path,
+        &args.layout,
+        &args.draft,
+    ) {
         Ok(filename_path) => filename_path,
         Err(err) => {
             eprint!("{}", err);
