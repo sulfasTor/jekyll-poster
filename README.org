@@ -1,4 +1,6 @@
-#+TITLE: jekyll-poster [WIP]
+#+TITLE: jekyll-poster
+
+Opens your editor of choice with a post template or draft and automatically pushes to github after closing.
 
 * Install
 #+begin_example
@@ -8,10 +10,21 @@ sudo mv ./target/release/jekyll-poster /usr/local/bin/
 
 * Usage
 #+begin_example
-jekyll-poster FILE [--layout <LAYOUT>] [--publish]
+Usage: jekyll-poster [OPTIONS] <POST_ID_NAME> <PROJECT_PATH>
+
+Arguments:
+  <POST_ID_NAME>
+  <PROJECT_PATH>
+
+Options:
+  -l, --layout <LAYOUT>  [default: default]
+  -p, --publish
+  -d, --draft
+  -h, --help             Print help
+  -V, --version          Print version
 #+end_example
 
 * Example
 #+begin_example
-jekyll-poster FILE [--layout <LAYOUT>] [--publish]
+EDITOR=emacsclient jekyll-poster my-new-post /path/to/github/repo -p
 #+end_example
