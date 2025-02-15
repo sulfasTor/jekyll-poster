@@ -1,7 +1,7 @@
 use std::{path::PathBuf, process};
 
 use clap::Parser;
-use post::{edit::edit_post, publish::add_and_commit_post};
+use post::{edit::create_post, publish::add_and_commit_post};
 
 pub mod post;
 
@@ -24,7 +24,7 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    let post_path = match edit_post(
+    let post_path = match create_post(
         &args.post_id_name,
         &args.project_path,
         &args.layout,
