@@ -1,5 +1,5 @@
-use git2::{Commit, Cred, PushOptions, RemoteCallbacks, Repository, Signature};
-use std::{env, path::Path};
+use git2::{Commit, Config, Cred, PushOptions, RemoteCallbacks, Repository, Signature};
+use std::path::Path;
 
 fn find_last_commit(repo: &Repository) -> Result<Commit, git2::Error> {
     Ok(repo
@@ -56,11 +56,14 @@ pub fn add_and_commit_post(
     )?;
 
     // Push
+    let config = Config::open_default()?;
+
     let mut remote = repo.find_remote("origin")?;
     let mut callbacks = RemoteCallbacks::new();
     callbacks.credentials(|_, _, _| {
-        let token = env::var("");
-        Cred::userpass_plaintext(&username, "")
+        Cred::credential_helper(&config, "https://github.com", Some(&username)).map_err(|e| {
+            git2::Error::from_str(&format!("Failed to call credential.helper: {}", e))
+        })
     });
     let mut push_options = PushOptions::new();
     push_options.remote_callbacks(callbacks);
