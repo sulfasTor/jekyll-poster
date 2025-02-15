@@ -26,6 +26,8 @@ jobs:
           # list of files that changed across commits
           fetch-depth: 0
 
+      - run: sudo apt install libssl-dev
+
       - name: Super-linter
         uses: super-linter/super-linter@v7.2.1 # x-release-please-version
         env:
