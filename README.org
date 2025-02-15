@@ -1,6 +1,6 @@
 #+TITLE: jekyll-poster
 
-Opens your editor of choice with a post template or draft and automatically pushes to github after closing.
+Opens your editor of choice with a post template or draft and automatically pushes to github pages after closing.
 
 * Install
 #+begin_example
