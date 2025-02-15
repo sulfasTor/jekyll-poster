@@ -1,5 +1,5 @@
-use git2::{Commit, Repository, Signature};
-use std::path::Path;
+use git2::{Commit, Cred, PushOptions, RemoteCallbacks, Repository, Signature};
+use std::{env, path::Path};
 
 fn find_last_commit(repo: &Repository) -> Result<Commit, git2::Error> {
     Ok(repo
@@ -55,9 +55,19 @@ pub fn add_and_commit_post(
         &[&parent_commit],
     )?;
 
-    // let mut remote = repo.find_remote("origin")?;
-    // remote.connect(Direction::Push)?;
-    // remote.push(&["refs/heads/main:refs/heads/main"], None)?;
+    // Push
+    let mut remote = repo.find_remote("origin")?;
+    let mut callbacks = RemoteCallbacks::new();
+    callbacks.credentials(|_, _, _| {
+        let token = env::var("");
+        Cred::userpass_plaintext(&username, "")
+    });
+    let mut push_options = PushOptions::new();
+    push_options.remote_callbacks(callbacks);
 
+    remote.push(
+        &["refs/heads/master:refs/heads/master"],
+        Some(&mut push_options),
+    )?;
     Ok(())
 }
