@@ -26,13 +26,13 @@ tag:
     fs::write(filename, fm.as_bytes())
 }
 
-fn get_or_create_post_path(base_path: &Path, post_name: &str) -> Result<PathBuf> {
+fn get_or_create_post_path(base_path: &Path, post_name: &str, draft: bool) -> Result<PathBuf> {
     let filename_path = PathBuf::from(format!(
         "{}-{}.md",
         Local::now().format("%Y-%m-%d"),
         post_name
     ));
-    let post_dir_path = base_path.join(PathBuf::from("_posts"));
+    let post_dir_path = base_path.join(PathBuf::from(if !draft { "_posts" } else { "_drafts" }));
     if !post_dir_path.is_dir() {
         fs::create_dir(&post_dir_path)?
     }
@@ -40,8 +40,13 @@ fn get_or_create_post_path(base_path: &Path, post_name: &str) -> Result<PathBuf>
     Ok(filename_path)
 }
 
-pub fn launch_editor(post_name: &str, base_path: &Path, layout: &str) -> Result<PathBuf> {
-    let filename_path = get_or_create_post_path(base_path, post_name)?;
+pub fn create_post(
+    post_name: &str,
+    base_path: &Path,
+    layout: &str,
+    draft: bool,
+) -> Result<PathBuf> {
+    let filename_path = get_or_create_post_path(base_path, post_name, draft)?;
     write_temp_file(
         &filename_path,
         layout,
