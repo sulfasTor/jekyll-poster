@@ -15,7 +15,6 @@ layout: {}
 title: TITLE
 excerpt_separator: <!--more-->
 date: {}
-tag:
 ---
 
 <!--more-->
