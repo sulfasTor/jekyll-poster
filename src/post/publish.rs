@@ -2,11 +2,10 @@ use git2::{Commit, Config, Cred, PushOptions, RemoteCallbacks, Repository, Signa
 use std::path::Path;
 
 fn find_last_commit(repo: &Repository) -> Result<Commit, git2::Error> {
-    Ok(repo
-        .head()?
+    repo.head()?
         .resolve()?
         .peel_to_commit()
-        .map_err(|_| git2::Error::from_str("Couldn't find commit"))?)
+        .map_err(|_| git2::Error::from_str("Couldn't find commit"))
 }
 
 pub fn add_and_commit_post(
@@ -61,9 +60,8 @@ pub fn add_and_commit_post(
     let mut remote = repo.find_remote("origin")?;
     let mut callbacks = RemoteCallbacks::new();
     callbacks.credentials(|_, _, _| {
-        Cred::credential_helper(&config, "https://github.com", Some(&username)).map_err(|e| {
-            git2::Error::from_str(&format!("Failed to call credential.helper: {}", e))
-        })
+        Cred::credential_helper(&config, "https://github.com", Some(&username))
+            .map_err(|e| git2::Error::from_str(&format!("Failed to call credential.helper: {}", e)))
     });
     let mut push_options = PushOptions::new();
     push_options.remote_callbacks(callbacks);

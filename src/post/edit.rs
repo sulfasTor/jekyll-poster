@@ -40,7 +40,12 @@ fn get_or_create_post_path(base_path: &Path, post_name: &str, draft: bool) -> Re
     Ok(filename_path)
 }
 
-pub fn create_post(post_name: &str, base_path: &Path, layout: &str, draft: bool) -> Result<PathBuf> {
+pub fn create_post(
+    post_name: &str,
+    base_path: &Path,
+    layout: &str,
+    draft: bool,
+) -> Result<PathBuf> {
     let filename_path = get_or_create_post_path(base_path, post_name, draft)?;
     write_temp_file(
         &filename_path,
